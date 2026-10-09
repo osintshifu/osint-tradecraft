@@ -12,7 +12,7 @@
 [![Stars](https://img.shields.io/github/stars/osintshifu/osint-tradecraft?style=flat-square)](https://github.com/osintshifu/osint-tradecraft/stargazers)
 [![Forks](https://img.shields.io/github/forks/osintshifu/osint-tradecraft?style=flat-square)](https://github.com/osintshifu/osint-tradecraft/forks)
 
-[Manuals](#manuals) · [Checklists](#checklists) · [Prompts](#prompts) · [Agent Skills](#agent-skills) · [Start Here](#start-here) · [Related Projects](#related-projects)
+[Advanced Field Guides](#advanced-field-guides) · [Manuals](#manuals) · [Checklists](#checklists) · [Prompts](#prompts) · [Agent Skills](#agent-skills) · [Start Here](#start-here) · [Related Projects](#related-projects)
 
 </div>
 
@@ -20,15 +20,20 @@
 
 ## Overview
 
-**OSINT Tradecraft** is a collection of manuals, checklists, and reusable investigation prompts for OSINT, media verification, cyber intelligence, and operational security. Built for investigators, journalists, researchers, and anyone who needs to check what they find and protect how they work.
+**OSINT Tradecraft** is a collection of field guides, manuals, checklists, and reusable investigation prompts for OSINT, media verification, cyber intelligence, and operational security. Built for investigators, journalists, researchers, and anyone who needs to check what they find and protect how they work.
 
-Pick a manual for a deeper look, open the checklist to work through a piece of content, or choose a prompt for a research task. Everything is Markdown, ready to read on GitHub or keep locally.
+Pick a field guide or manual for a deeper look, open the checklist to work through a piece of content, or choose a prompt for a research task. Everything is Markdown, ready to read on GitHub or keep locally.
+
+## Advanced Field Guides
+
+| Field Guide | Coverage |
+|:--|:--|
+| **[Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide](./field-guides/digital-media-authenticity-provenance-field-guide.md)** | Examine images, video, audio and documents with provenance checks, technical workflows, validation controls and reporting templates. |
 
 ## Manuals
 
 | Manual | Coverage |
 |:--|:--|
-| **[AI Media Forensics Manual](manuals/ai-media-forensics-manual.md)** | How to examine text, images, audio, and video, from initial checks to deeper analysis. Includes tools and reporting templates. |
 | **[Paranoid OPSEC Manual](manuals/paranoid-opsec-manual.md)** | Protect your research identity, devices, browser, communications, and files. Includes checklists and practical examples. |
 
 ## Checklists
@@ -50,7 +55,7 @@ A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for
 | Your task | Start with |
 |:--|:--|
 | Check suspicious media | [AI Detection Checklist](checklists/ai-detection-checklist.md) |
-| Go deeper into media analysis | [AI Media Forensics Manual](manuals/ai-media-forensics-manual.md) |
+| Go deeper into media analysis | [Digital Media Authenticity, Provenance & Forensics](./field-guides/digital-media-authenticity-provenance-field-guide.md) |
 | Set up your OPSEC | [Paranoid OPSEC Manual](manuals/paranoid-opsec-manual.md) |
 | Prepare an investigation with a reusable prompt | [Investigation Prompts](prompts/README.md) |
 
@@ -59,8 +64,9 @@ A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for
 ```text
 osint-tradecraft/
 ├── README.md
+├── field-guides/
+│   └── digital-media-authenticity-provenance-field-guide.md
 ├── manuals/
-│   ├── ai-media-forensics-manual.md
 │   └── paranoid-opsec-manual.md
 ├── checklists/
 │   └── ai-detection-checklist.md

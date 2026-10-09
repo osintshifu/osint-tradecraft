@@ -1,9 +1,11 @@
 # ✅ AI Detection Checklist
 
 ![Version](https://img.shields.io/badge/version-v1.0.0-blue)  
-![Last Update](https://img.shields.io/badge/updated-2025--09--13-red)
+![Last Update](https://img.shields.io/badge/updated-2026--10--09-red)
 
-A comprehensive and detailed checklist for detecting and analyzing AI-generated or manipulated media — including images, video, audio, and text. It is intended for OSINT investigators, journalists, digital forensic analysts, and security professionals who require structured, reliable verification procedures.
+A practical checklist for examining potentially generated or manipulated images, video, audio and text. Use observations as leads for a specific claim, then test processing history, source context and alternative explanations.
+
+No individual visual anomaly, missing metadata or detector score establishes synthetic origin. Compression, editing, camera processing and ordinary recording conditions can produce similar signals. For acquisition procedures, controls and reporting, use the [Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide](../field-guides/digital-media-authenticity-provenance-field-guide.md).
 
 ## 🖼️ Image & Visual Content Verification
 
@@ -23,7 +25,7 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
     
     - Look for stitching errors, inconsistent textures, or repeating patterns.
         
-    - Validate logos and printed text on clothing (AI often renders gibberish or blurred letters).
+    - Inspect logos and printed text on clothing; blur or distorted letters can also result from resolution, motion or compression.
         
     - Check folds and shadows in fabric for natural consistency.
         
@@ -37,11 +39,11 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
 -  **Lighting & Shadows**
     
-    - Ensure all shadows align with a single light source.
+    - Test shadows against plausible light sources, including multiple lamps, flash, reflections and compositing; do not assume a single source.
         
     - Validate intensity and direction of light on different objects.
         
-    - Use [SunCalc](https://www.suncalc.org/) to validate time of day.
+    - Use [SunCalc](https://www.suncalc.org/) to test a claimed location and time against solar geometry, allowing for measurement uncertainty.
         
 -  **Reflections**
     
@@ -53,7 +55,7 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
     
     - Run **reverse image search** on full image and cropped anomalies.
         
-    - Perform **Error Level Analysis (ELA)** via [Forensically](https://29a.ch/photo-forensics/).
+    - Use **Error Level Analysis (ELA)** via [Forensically](https://29a.ch/photo-forensics/) on suitable JPEGs with matched processing controls. Bright regions alone do not prove manipulation.
         
     - Inspect for cloning or copy-paste elements.
         
@@ -74,7 +76,7 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
 -  **Motion & Blur**
     
-    - Validate natural motion blur; AI often generates sharp unnatural edges during motion.
+    - Inspect motion blur and sharp edges, accounting for shutter speed, stabilization, frame interpolation and transcoding.
         
     - Look for “halo” effects or ghosting in moving objects.
         
@@ -96,9 +98,9 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
 -  **AI Detection**
     
-    - Run frames through [SensityAI](https://sensity.ai/) or Reality Defender.
+    - If authorized to upload, use [SensityAI](https://sensity.ai/) or another suitable detector as a supporting test. Record model/version, input processing, controls and known limitations.
         
-    - Apply forensic CNNs like FaceForensics++.
+    - Use a validated model suited to the tested manipulation and media conditions. [FaceForensics++](https://github.com/ondyari/FaceForensics) is a research dataset and benchmark, not a standalone authenticity verdict.
         
 
 ## 🔊 Audio Verification
@@ -131,11 +133,11 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
 -  **Technical Tools**
     
-    - Run AI voice detection with Deepware Scanner or Intel FakeCatcher.
+    - Test suspected synthetic speech with a validated audio anti-spoofing model and matched authentic/synthetic controls. [ASVspoof](https://www.asvspoof.org/) provides research benchmarks; benchmark performance does not establish case-specific accuracy.
         
-    - Compare with known samples of the speaker.
+    - Compare recording conditions and speech characteristics with authorized reference samples; voice similarity alone does not establish speaker identity or exclude cloning.
         
-    - Analyze jitter/shimmer metrics in Praat.
+    - Analyze jitter/shimmer metrics in Praat only where the recording and method support them; these measurements are not a general synthetic-voice test.
         
 
 ## 📝 Textual Verification
@@ -156,11 +158,11 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
 -  **Technical Tools**
     
-    - Run [GLTR](http://gltr.io/) or [DetectGPT](https://github.com/eric-mitchell/detect-gpt).
+    - Treat [GLTR](http://gltr.io/) or [DetectGPT](https://github.com/eric-mitchell/detect-gpt) as research methods with model, language and sampling assumptions. Their scores do not prove authorship.
         
     - Perform stylometric comparison with JStylo.
         
-    - Use HuggingFace AI detection models for second opinion.
+    - If testing a text detector, validate it against matched human and generated samples. Correlated model outputs are not independent corroboration; do not report a score as an AI-authorship probability.
         
 
 ## 🌍 Contextual & Environmental Consistency
@@ -183,7 +185,7 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
     
     - Extract with [ExifTool](https://exiftool.org/).
         
-    - Look for missing or improbable fields.
+    - Investigate improbable fields against acquisition and processing history. Missing metadata is common and does not establish manipulation.
         
     - Detect editing software tags (Stable Diffusion, MidJourney, Photoshop).
         
@@ -193,17 +195,17 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
         
     - Compare video codecs against known device profiles.
         
--  **Sensor Noise & PRNU**
+-  **Sensor Noise, PRNU & Camera-Model Traces**
     
-    - Run [Noiseprint](https://github.com/isi-vista/noiseprint) for sensor fingerprinting.
+    - Use [Noiseprint](https://github.com/grip-unina/noiseprint) for camera-model traces and potential localization, subject to validation. It does not identify an individual physical sensor.
         
-    - Compare with known authentic samples.
+    - For individual-camera attribution using PRNU, use an appropriate validated method, adequate reference images and controls for compression, resizing and processing.
         
 -  **Provenance Checks**
     
-    - Check for C2PA metadata.
+    - Check for C2PA manifests on the exact rendition; distinguish signature validation, asset binding, signer trust and the assertions made.
         
-    - Validate Adobe Content Credentials.
+    - Inspect Content Credentials validation results and edit history. A valid credential does not prove that a depicted event occurred; an absent credential does not prove fabrication.
         
     - Run Google SynthID watermark checks if available.
         
@@ -213,7 +215,7 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
     
 -  Compare across multiple tools and detection methods.
     
--  Store SHA256 and MD5 hashes of original files for integrity.
+-  Store SHA-256 hashes of original files and verify them after transfers. Record MD5 only if a legacy workflow requires it, alongside SHA-256.
     
 -  Maintain chain of custody logs for evidentiary purposes.
     
@@ -228,9 +230,9 @@ A comprehensive and detailed checklist for detecting and analyzing AI-generated 
 |[Forensically](https://29a.ch/photo-forensics/)|Image forensics|Error level analysis, clone detection, metadata review|
 |[InVID Plugin](https://www.invid-project.eu/tools-and-services/invid-verification-plugin/)|Video verification|Extract thumbnails, reverse video search, metadata analysis|
 |[ExifTool](https://exiftool.org/)|Metadata extraction|Inspect and validate EXIF and file metadata|
-|[GLTR](http://gltr.io/)|Text analysis|Detect statistical patterns in AI-generated text|
-|[DetectGPT](https://github.com/eric-mitchell/detect-gpt)|Text analysis|Identify likely AI-generated passages|
-|[Noiseprint](https://github.com/isi-vista/noiseprint)|Image forensics|Sensor fingerprinting and camera source validation|
+|[GLTR](http://gltr.io/)|Text research|Inspect token statistics under a selected language model; not proof of authorship|
+|[DetectGPT](https://github.com/eric-mitchell/detect-gpt)|Text research|Research method for generation detection under stated model assumptions|
+|[Noiseprint](https://github.com/grip-unina/noiseprint)|Image forensics|Camera-model traces and manipulation localization; not individual-sensor attribution|
 |[Audacity](https://www.audacityteam.org/)|Audio analysis|Waveform and spectrogram inspection|
 |[Praat](https://www.fon.hum.uva.nl/praat/)|Audio forensics|Acoustic analysis of speech and voice patterns|
 |[Meteostat](https://meteostat.net/)|Contextual data|Historical weather validation|
