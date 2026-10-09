@@ -1,8 +1,8 @@
-# Cyber Intelligence Toolkit
+# OSINT Tradecraft
 
 ## 🎯 Overview
 
-The **Cyber Intelligence Toolkit** is a curated collection of manuals, playbooks, checklists, and appendices built to support a wide spectrum of investigative and analytical tasks. It equips investigators, analysts, and practitioners with structured, reliable, and actionable references for digital investigations — from rapid verification and OSINT workflows to deep forensic analysis.
+The **OSINT Tradecraft** is a curated collection of manuals and checklists built to support a wide spectrum of investigative and analytical tasks. It equips investigators, analysts, and practitioners with structured, reliable, and actionable references for digital investigations — from rapid verification and OSINT workflows to deep forensic analysis.
 
 This repository emphasizes:
 
@@ -16,14 +16,16 @@ The toolkit combines theory with hands-on procedures, making it suitable for qui
 
 ## 📂 Repository Structure
 
-```
-cyber-intelligence-toolkit/
-│
-├── manuals/       # Full manuals & guides (in-depth methodologies)
-├── playbooks/     # Workflow-driven procedures for investigations
-├── checklists/    # Concise step-by-step verification guides
-├── appendices/    # Tools, automation snippets, references
-└── README.md      # This overview
+```text
+osint-tradecraft/
+├── README.md
+├── manuals/
+│   ├── ai-media-forensics-manual.md
+│   └── paranoid-opsec-manual.md
+├── checklists/
+│   └── ai-detection-checklist.md
+└── agent-skills/
+    └── README.md
 ```
 
 ## 📌 Audience
@@ -38,5 +40,5 @@ cyber-intelligence-toolkit/
 ### 🔖 Credits
 
 Maintained by **oryon** + **[OSINT360](https://tntpp9.short.gy/osint360-gpt)** 
-This document is part of the **[Cyber Intelligence Toolkit](https://github.com/oryon-osint/cyber-intelligence-toolkit)** project.  
+This document is part of the **[OSINT Tradecraft](https://github.com/osintshifu/osint-tradecraft)** project.  
 
