@@ -1,31 +1,66 @@
-# Digital Media Authenticity, Provenance & Forensics — Advanced Field Guide
+<a id="digital-media-authenticity-provenance--forensics--advanced-field-guide"></a>
 
-**A practical investigation reference for images, video, audio, documents, synthetic media, provenance credentials, source tracing, laboratory workflows and evidence-grade reporting.**
+# Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide
 
-> **Operating principle:** Determine exactly which claim is being tested; preserve the strongest available evidence; prefer original sources and reproducible tests; look for alternative explanations; distinguish verified file integrity from the truth of depicted events. Do not convert detector scores, visual oddities, absent metadata, or archive snapshots into categorical authenticity claims.
+Methods for preserving and examining images, video, audio and documents, tracing their sources and reporting findings.
+
+**Author:** Marcin Meller ([osintshifu](https://github.com/osintshifu))
+
+| Publication | Details |
+|:--|:--|
+| Published in | [OSINT Tradecraft](https://github.com/osintshifu/osint-tradecraft) |
+| Edition | Revised edition, October 2026 |
+| First repository publication | 9 October 2026 |
+| Revision date | 9 October 2026 |
+| Language | English |
+| Canonical source | [Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide](https://github.com/osintshifu/osint-tradecraft/blob/main/field-guides/digital-media-authenticity-provenance-field-guide.md) |
+| Rights | Copyright (c) 2026 Marcin Meller (osintshifu). No reuse license is specified in the source repository. |
+
+**Suggested citation**
+
+> Meller, Marcin (osintshifu). 2026. *Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide.* OSINT Tradecraft. Revised 9 October 2026. https://github.com/osintshifu/osint-tradecraft/blob/main/field-guides/digital-media-authenticity-provenance-field-guide.md
+
+## How to use this guide
+
+For a new examination, begin with the intake and acquisition procedures in sections 2-7. For an existing case, use the task links below or the full contents. Keep the guide's revision date with the methods recorded for the case.
+
+| Task | Start with |
+|:--|:--|
+| Assess a newly received file | [Initial media triage](#4-initial-media-triage) and [first-pass inspection](#6-first-pass-file-inspection) |
+| Examine an image, video, audio recording or document | [Images](#11-technical-image-examination-format-and-structure), [video](#17-video-forensic-model-three-timelines), [audio](#27-questions-to-resolve-in-audio-authentication) or [documents](#36-documents-screenshots-slides-and-scanned-pages) |
+| Check signed provenance | [C2PA validation](#40-c2pa-24-validation-and-interpretation) |
+| Follow a case procedure | [SOPs A-K](#49-repeatable-sop-a---viral-photo-with-disputed-timeplace) |
+| Write or review findings | [Peer review](#60-independent-peer-review-and-quality-assurance), [reporting templates](#75-incidentmedia-chronology-template) and [field checklists](#89-field-checklists-by-decision-stage) |
+| Find tools and references | [Tool selection](#64-tool-and-service-selection-matrix) and [references](#92-references) |
+
+The procedures, examples and templates are contained in this file. Tool execution requires the relevant software; external services and source documents may require network access or an account. Before running commands, read the handling precautions in section 5 and the prerequisites beside each example.
+
+---
+
+> Define the claim before choosing a test. Preserve the strongest available evidence, seek original sources and test alternative explanations. Report what the evidence establishes about the file, its source and the depicted event separately. Detector scores, visual oddities, missing metadata and archive snapshots each need interpretation and corroboration.
 
 <details>
-<summary>Contents - all 92 sections</summary>
+<summary>Full contents</summary>
 
-- [1. Mission and decision model](#1-mission-and-decision-model)
+- [1. Define the examination question](#1-define-the-examination-question)
 - [2. Case intake and authority](#2-case-intake-and-authority)
-- [3. Evidence classes, priority and hierarchy](#3-evidence-classes-priority-and-hierarchy)
-- [4. First 10 minutes: field triage SOP](#4-first-10-minutes-field-triage-sop)
+- [3. Evidence sources and acquisition priorities](#3-evidence-sources-and-acquisition-priorities)
+- [4. Initial media triage](#4-initial-media-triage)
 - [5. Safe evidence handling and processing environment](#5-safe-evidence-handling-and-processing-environment)
-- [6. Universal first-pass command kit](#6-universal-first-pass-command-kit)
+- [6. First-pass file inspection](#6-first-pass-file-inspection)
 - [7. Full acquisition and chain of custody](#7-full-acquisition-and-chain-of-custody)
-- [8. Why metadata is contextual, not dispositive](#8-why-metadata-is-contextual-not-dispositive)
+- [8. Interpreting metadata](#8-interpreting-metadata)
 - [9. Source discovery and media lineage](#9-source-discovery-and-media-lineage)
-- [10. Reverse search operational recipe](#10-reverse-search-operational-recipe)
+- [10. Reverse-image and keyframe search](#10-reverse-image-and-keyframe-search)
 - [11. Technical image examination: format and structure](#11-technical-image-examination-format-and-structure)
 - [12. Image localization: choose tests by hypothesis](#12-image-localization-choose-tests-by-hypothesis)
-- [13. Error level analysis (ELA) - correct interpretation](#13-error-level-analysis-ela--correct-interpretation)
+- [13. Error level analysis (ELA): procedure and limits](#13-error-level-analysis-ela-procedure-and-limits)
 - [14. Copy-move, seams, illumination and geometry](#14-copy-move-seams-illumination-and-geometry)
 - [15. Sensor pattern noise, CFA and Noiseprint](#15-sensor-pattern-noise-cfa-and-noiseprint)
 - [16. AI image detection: defensible use](#16-ai-image-detection-defensible-use)
 - [17. Video forensic model: three timelines](#17-video-forensic-model-three-timelines)
 - [18. Video container and elementary stream analysis](#18-video-container-and-elementary-stream-analysis)
-- [19. Video frame extraction without destroying evidence](#19-video-frame-extraction-without-destroying-evidence)
+- [19. Extracting video frames](#19-extracting-video-frames)
 - [20. Video continuity and manipulation hypotheses](#20-video-continuity-and-manipulation-hypotheses)
 - [21. Video codec, GOP and re-encoding analysis](#21-video-codec-gop-and-re-encoding-analysis)
 - [22. High-frame-rate, slow motion, interpolation, HDR and generative fill](#22-high-frame-rate-slow-motion-interpolation-hdr-and-generative-fill)
@@ -33,7 +68,7 @@
 - [24. Live streams, screen recordings and conference media](#24-live-streams-screen-recordings-and-conference-media)
 - [25. Broadcasting and CCTV-specific caveats](#25-broadcasting-and-cctv-specific-caveats)
 - [26. Video deepfake detector workflow](#26-video-deepfake-detector-workflow)
-- [27. Audio authentication is not just voice-clone detection](#27-audio-authentication-is-not-just-voice-clone-detection)
+- [27. Questions to resolve in audio authentication](#27-questions-to-resolve-in-audio-authentication)
 - [28. Audio intake, codec and continuity](#28-audio-intake-codec-and-continuity)
 - [29. Audio waveform and spectrogram workflow](#29-audio-waveform-and-spectrogram-workflow)
 - [30. Voice cloning and audio spoofing](#30-voice-cloning-and-audio-spoofing)
@@ -46,7 +81,7 @@
 - [37. PDF and Office quick-read recipes](#37-pdf-and-office-quick-read-recipes)
 - [38. OCR and text verification](#38-ocr-and-text-verification)
 - [39. AI-generated text: narrow evidentiary scope](#39-ai-generated-text-narrow-evidentiary-scope)
-- [40. Content Credentials and C2PA 2.4: correct mental model](#40-content-credentials-and-c2pa-24-correct-mental-model)
+- [40. C2PA 2.4: validation and interpretation](#40-c2pa-24-validation-and-interpretation)
 - [41. Watermarks, fingerprints and identification](#41-watermarks-fingerprints-and-identification)
 - [42. Cross-modal evidence and contradiction matrix](#42-cross-modal-evidence-and-contradiction-matrix)
 - [43. Geolocation: validate the event, protect privacy](#43-geolocation-validate-the-event-protect-privacy)
@@ -55,29 +90,29 @@
 - [46. Reenactment, satire, editorial synthesis and staged content](#46-reenactment-satire-editorial-synthesis-and-staged-content)
 - [47. Media authenticity models: laboratory validation protocol](#47-media-authenticity-models-laboratory-validation-protocol)
 - [48. Threat models: anti-forensics and inadvertent artifact loss](#48-threat-models-anti-forensics-and-inadvertent-artifact-loss)
-- [49. Repeatable SOP A - Viral photo with disputed time/place](#49-repeatable-sop-a--viral-photo-with-disputed-timeplace)
-- [50. SOP B - Video alleging a public official said something](#50-sop-b--video-alleging-a-public-official-said-something)
-- [51. SOP C - Alleged cloned-voice phone message](#51-sop-c--alleged-cloned-voice-phone-message)
-- [52. SOP D - Suspected edited screenshot or forged document](#52-sop-d--suspected-edited-screenshot-or-forged-document)
-- [53. SOP E - Suspicious C2PA / Content Credentials claim](#53-sop-e--suspicious-c2pa--content-credentials-claim)
-- [54. SOP F - Suspected manipulative short-form video](#54-sop-f--suspected-manipulative-short-form-video)
-- [55. SOP G - Fully synthetic or hybrid media in news context](#55-sop-g--fully-synthetic-or-hybrid-media-in-news-context)
-- [56. SOP H - Multi-camera reconstruction of a public incident](#56-sop-h--multi-camera-reconstruction-of-a-public-incident)
-- [57. SOP I - Public online video with suspected removed/spliced audio](#57-sop-i--public-online-video-with-suspected-removedspliced-audio)
-- [58. SOP J - Photo sequence or burst alleged to be “single capture”](#58-sop-j--photo-sequence-or-burst-alleged-to-be-single-capture)
-- [59. SOP K - Synthetic text plus counterfeit imagery in coordinated narrative](#59-sop-k--synthetic-text-plus-counterfeit-imagery-in-coordinated-narrative)
+- [49. Repeatable SOP A - Viral photo with disputed time/place](#49-repeatable-sop-a---viral-photo-with-disputed-timeplace)
+- [50. SOP B - Video alleging a public official said something](#50-sop-b---video-alleging-a-public-official-said-something)
+- [51. SOP C - Alleged cloned-voice phone message](#51-sop-c---alleged-cloned-voice-phone-message)
+- [52. SOP D - Suspected edited screenshot or forged document](#52-sop-d---suspected-edited-screenshot-or-forged-document)
+- [53. SOP E - Suspicious C2PA / Content Credentials claim](#53-sop-e---suspicious-c2pa--content-credentials-claim)
+- [54. SOP F - Suspected manipulative short-form video](#54-sop-f---suspected-manipulative-short-form-video)
+- [55. SOP G - Fully synthetic or hybrid media in news context](#55-sop-g---fully-synthetic-or-hybrid-media-in-news-context)
+- [56. SOP H - Multi-camera reconstruction of a public incident](#56-sop-h---multi-camera-reconstruction-of-a-public-incident)
+- [57. SOP I - Public online video with suspected removed/spliced audio](#57-sop-i---public-online-video-with-suspected-removedspliced-audio)
+- [58. SOP J - Photo sequence or burst alleged to be "single capture"](#58-sop-j---photo-sequence-or-burst-alleged-to-be-single-capture)
+- [59. SOP K - Synthetic text plus counterfeit imagery in coordinated narrative](#59-sop-k---synthetic-text-plus-counterfeit-imagery-in-coordinated-narrative)
 - [60. Independent peer review and quality assurance](#60-independent-peer-review-and-quality-assurance)
 - [61. Quality gates for high-impact cases](#61-quality-gates-for-high-impact-cases)
 - [62. Common misleading arguments and corrections](#62-common-misleading-arguments-and-corrections)
-- [63. Practical interpretation patterns](#63-practical-interpretation-patterns)
+- [63. Interpreting findings](#63-interpreting-findings)
 - [64. Tool and service selection matrix](#64-tool-and-service-selection-matrix)
-- [65. Source atlas: core forensic standards, evaluation and provenance](#65-source-atlas-core-forensic-standards-evaluation-and-provenance)
-- [66. Source atlas: local file and metadata inspection](#66-source-atlas-local-file-and-metadata-inspection)
-- [67. Source atlas: OSINT discovery and publication history](#67-source-atlas-osint-discovery-and-publication-history)
-- [68. Source atlas: pixel forensics, manipulation localization and benchmarks](#68-source-atlas-pixel-forensics-manipulation-localization-and-benchmarks)
-- [69. Source atlas: audio, speech and video examination](#69-source-atlas-audio-speech-and-video-examination)
-- [70. Source atlas: documents, OCR, geospatial and event context](#70-source-atlas-documents-ocr-geospatial-and-event-context)
-- [71. Source atlas: commercial/hosted services (access-dependent)](#71-source-atlas-commercialhosted-services-access-dependent)
+- [65. Standards, evaluation and provenance references](#65-standards-evaluation-and-provenance-references)
+- [66. File and metadata tools](#66-file-and-metadata-tools)
+- [67. Source discovery and publication-history tools](#67-source-discovery-and-publication-history-tools)
+- [68. Image forensics tools and benchmarks](#68-image-forensics-tools-and-benchmarks)
+- [69. Audio, speech and video tools](#69-audio-speech-and-video-tools)
+- [70. Document, OCR, geospatial and event-context tools](#70-document-ocr-geospatial-and-event-context-tools)
+- [71. Commercial and hosted services](#71-commercial-and-hosted-services)
 - [72. A reproducible local evidence-manifest script](#72-a-reproducible-local-evidence-manifest-script)
 - [73. A controlled image comparison recipe](#73-a-controlled-image-comparison-recipe)
 - [74. A reproducible audio-segment review recipe](#74-a-reproducible-audio-segment-review-recipe)
@@ -98,39 +133,43 @@
 - [89. Field checklists by decision stage](#89-field-checklists-by-decision-stage)
 - [90. Practical training and tabletop exercises](#90-practical-training-and-tabletop-exercises)
 - [91. Final review checklist for this guide](#91-final-review-checklist-for-this-guide)
-- [92. Source review notes and provenance](#92-source-review-notes-and-provenance)
+- [92. References](#92-references)
 
 </details>
 
-## 1. Mission and decision model
+<a id="1-mission-and-decision-model"></a>
 
-This guide serves OSINT investigators, journalists, verification teams, incident responders, fact-checkers, forensic examiners, attorneys commissioning technical assessments, and authorized security researchers. It is an operational reference, not a substitute for a qualified expert in contested legal proceedings. Apply local evidentiary, consent, privacy, data-retention and disclosure obligations.
+## 1. Define the examination question
 
-**Four separate propositions must never be collapsed:**
+Use this guide to plan media examinations, choose tests and write findings. It covers source research, technical analysis and reporting for investigative, journalistic, incident-response and legal work. Contested legal examinations require qualified expertise. Apply local evidentiary, consent, privacy, data-retention and disclosure obligations.
+
+Assess these four questions separately:
 
 | Question | Typical claim | Strongest evidence classes | What it cannot prove |
 |---|---|---|---|
-| **File integrity** | “These bytes have not changed since acquisition.” | Original-byte SHA-256, signed manifest, custody logs, reproducible comparison | That the source was truthful or the event happened |
-| **Provenance/source** | “This originated with camera / publisher / account X.” | Trusted signed origin, first-party original, direct publisher confirmation, corroborating source records | That the scene was unstaged or the speaker consented |
-| **Content/context** | “This shows event E at time T in place P.” | Independent event records, reverse-search chronology, environmental/geospatial constraints | Whether all pixels/samples came directly from a sensor |
-| **Generation/manipulation** | “AI generated or materially altered this content.” | Validated forensic localization, verifiable creation/edit claims, original-vs-altered comparison, independent technical examination | Who created it or why, absent separate evidence |
+| **File integrity** | "These bytes have not changed since acquisition." | Original-byte SHA-256, signed manifest, custody logs, reproducible comparison | That the source was truthful or the event happened |
+| **Provenance/source** | "This originated with camera / publisher / account X." | Trusted signed origin, first-party original, direct publisher confirmation, corroborating source records | That the scene was unstaged or the speaker consented |
+| **Content/context** | "This shows event E at time T in place P." | Independent event records, reverse-search chronology, environmental/geospatial constraints | Whether all pixels/samples came directly from a sensor |
+| **Generation/manipulation** | "AI generated or materially altered this content." | Validated forensic localization, verifiable creation/edit claims, original-vs-altered comparison, independent technical examination | Who created it or why, absent separate evidence |
 
-The permitted outcome is often **inconclusive**. Do not equate “no visible manipulation detected” with “authentic,” “no C2PA credential” with “fake,” or “contains AI-generated segments” with “the entire recording is synthetic.”
+Report **inconclusive** when the evidence does not resolve the claim. "No visible manipulation detected" does not establish authenticity; missing C2PA credentials do not establish fabrication. A finding of synthetic content applies only to the regions or segments the evidence supports.
 
 ### 1.1 Define the claim before choosing a tool
 
 Write a precise, falsifiable proposition, for example:
 
-- “The published photograph was captured at location L on date D.”
-- “The circulating clip is continuous and unedited.”
-- “The voice segment from 00:31–00:47 is synthetic.”
-- “This PDF existed, unchanged, before the reported event.”
-- “The broadcaster's original upload contains the same disputed frame.”
-- “The attached JPEG has an intact C2PA manifest signed by a trusted source.”
+- "The published photograph was captured at location L on date D."
+- "The circulating clip is continuous and unedited."
+- "The voice segment from 00:31-00:47 is synthetic."
+- "This PDF existed, unchanged, before the reported event."
+- "The broadcaster's original upload contains the same disputed frame."
+- "The attached JPEG has an intact C2PA manifest signed by a trusted source."
 
 Specify the alternative hypotheses before looking at results. Examples: ordinary compression; intentional staging; non-AI retouching; transcoding; a captioned older clip; deepfake; an authentically recorded but misleadingly edited sequence; misattribution of a truthful recording.
 
-### 1.2 Five-stage investigation lifecycle
+<a id="12-five-stage-investigation-lifecycle"></a>
+
+### 1.2 Investigation workflow
 
 1. **Scope / preserve:** case purpose, legal authority, privacy review, threat model, claim inventory, source acquisition.
 2. **Triage / source:** native bytes, metadata, file structure, source discovery, earliest reliable appearances, obvious context checks.
@@ -138,7 +177,11 @@ Specify the alternative hypotheses before looking at results. Examples: ordinary
 4. **Correlate / falsify:** compare independent provenance, source, technical, scene and timeline evidence; test alternative explanations.
 5. **Peer review / report:** independently reproduce decisive checks, disclose limitations and contradictory evidence, preserve deliverables.
 
-Every test must record: question, prerequisite, source/asset ID, tool/version, command/parameters, output path, observation, interpretation, limitations and what result would overturn the interpretation.
+For each test, record:
+
+- **Input:** examination question, prerequisites and source/asset ID.
+- **Execution:** tool/version, command/parameters and output path.
+- **Assessment:** observation, interpretation, limitations and what result would overturn the interpretation.
 
 ## 2. Case intake and authority
 
@@ -163,11 +206,13 @@ Use a written intake record:
 
 ### 2.1 Confidence is not probability
 
-Use **high / medium / low confidence** for the quality of an analytical judgment, and separately describe likelihood in ordinary language when supported. No invented numerical certainty. A model output of `0.93` is *a model score*, not automatically a 93% probability that the content is fake.
+Use **high / medium / low confidence** to describe the quality of an analytical judgment. Describe likelihood separately, in ordinary language, when the evidence supports it. A model output of `0.93` is a model score; it does not by itself establish a 93% probability that the content is fake.
 
 Record a finding with one of: `VERIFIED`, `SUPPORTED`, `INFERENCE`, `CONFLICT`, `UNRESOLVED`, `NOT TESTED`; add provenance and independence notes.
 
-## 3. Evidence classes, priority and hierarchy
+<a id="3-evidence-classes-priority-and-hierarchy"></a>
+
+## 3. Evidence sources and acquisition priorities
 
 Recommended acquisition order, subject to availability and authorization:
 
@@ -214,7 +259,9 @@ CASE-001/
 
 Do not assume ordinary OS file permissions amount to write-blocking or forensic custody. Consider write blockers and storage access logs for evidence-bearing devices. Reading files may alter file-system access times; document your acquisition procedure.
 
-## 4. First 10 minutes: field triage SOP
+<a id="4-first-10-minutes-field-triage-sop"></a>
+
+## 4. Initial media triage
 
 **Inputs:** exact claim, highest-quality available media, source page.
 
@@ -224,16 +271,16 @@ Do not assume ordinary OS file permissions amount to write-blocking or forensic 
 4. Extract metadata read-only; avoid relying on displayed gallery dates.
 5. Identify first-party source and try reverse-image / keyframe searches.
 6. Check whether a C2PA credential exists **on this exact rendition**.
-7. Inspect obvious contextual mismatches without deciding solely from “AI-looking” details.
+7. Inspect obvious contextual mismatches without deciding solely from "AI-looking" details.
 8. Enumerate alternative explanations: platform processing, HDR/AI denoising, filters, editorial illustration, editing, old footage.
 9. Decide the next test needed to resolve the *specific* claim.
 10. Output `CONTINUE`, `REQUEST ORIGINAL`, `SPECIALIST REVIEW`, or `INCONCLUSIVE / NO FURTHER PROPORTIONATE TEST`.
 
-**Escalate immediately** where exposure could cause serious harm, a claim is widely disseminated, source integrity is disputed, a model’s result would be presented as definitive, or a legal decision depends on technical authentication.
+**Escalate immediately** where exposure could cause serious harm, a claim is widely disseminated, source integrity is disputed, a model's result would be presented as definitive, or a legal decision depends on technical authentication.
 
 ## 5. Safe evidence handling and processing environment
 
-Treat every media file, subtitle, browser page, tool repository, embedded link and machine-readable metadata field as **untrusted input**. Media parsers, image previewers and archival viewers can contain vulnerabilities. Use updated inspection tools on isolated systems; do not run supplied scripts, macros, embedded executables or “repair utilities.”
+Treat every media file, subtitle, browser page, tool repository, embedded link and machine-readable metadata field as **untrusted input**. Media parsers, image previewers and archival viewers can contain vulnerabilities. Use updated inspection tools on isolated systems; do not run supplied scripts, macros, embedded executables or "repair utilities."
 
 - Work offline with copies for confidential evidence; do not upload victim material, unreleased media or sensitive faces/voices to public detector sites.
 - If an online service is used, record terms, data residency, retention, privacy and whether uploads train models or become searchable.
@@ -243,9 +290,11 @@ Treat every media file, subtitle, browser page, tool repository, embedded link a
 - Avoid invoking media metadata strings inside unsanitized shell commands or AI-agent tools.
 - Test tool behavior on synthetic innocuous samples before handling case data.
 
-## 6. Universal first-pass command kit
+<a id="6-universal-first-pass-command-kit"></a>
 
-The following Bash recipe assumes GNU coreutils on Linux and operates on a trusted working copy. Run in an analysis workspace; adapt paths and installed versions. None of the extraction commands proves authenticity. Replace placeholders only with files you own or are authorized to examine. Each probe records stdout, stderr, exit status and arguments separately; a failed probe does not prevent the remaining checks from running.
+## 6. First-pass file inspection
+
+Run these Bash commands on Linux with GNU coreutils, using a trusted working copy in an analysis workspace. Adapt paths to files you own or are authorized to examine and check the installed tool versions. Use the outputs to inspect file structure and metadata. Each probe records stdout, stderr, exit status and arguments separately; a failed probe does not prevent the remaining checks from running.
 
 ```bash
 set -eu
@@ -286,7 +335,7 @@ printf 'Failed probes: %s\n' "$PROBE_FAILURES" > "$OUT/summary.txt"
 test "$PROBE_FAILURES" -eq 0
 ```
 
-`sha256sum` and GNU `stat` are not portable POSIX interfaces; use documented equivalents on other systems. `file`, ExifTool, MediaInfo and ffprobe have partially different coverage; apparent disagreements are investigative leads, not automatic tampering indicators. ffprobe may reject a still image or report limited stream information. Inspect every `.exit-status` and `.stderr` file; an empty or failed output is not a negative forensic result. Use a fresh output directory for each run to retain earlier logs.
+`sha256sum` and GNU `stat` are not portable POSIX interfaces; use documented equivalents on other systems. `file`, ExifTool, MediaInfo and ffprobe cover different parts of a file, so investigate disagreements before attributing them to tampering. ffprobe may reject a still image or report limited stream information. Inspect every `.exit-status` and `.stderr` file. A failed probe or empty output leaves the relevant check unresolved. Use a fresh output directory for each run to retain earlier logs.
 
 For PowerShell:
 
@@ -319,7 +368,9 @@ Preserve stdout, stderr, return code, full version string and input hash in the 
 |---|---|---|---|---|---|---|---|---|
 | CASE-001 | E001 | ISO-8601 | Analyst | Acquisition | Source→Vault | SHA256 | Tool/version | None |
 
-## 8. Why metadata is contextual, not dispositive
+<a id="8-why-metadata-is-contextual-not-dispositive"></a>
+
+## 8. Interpreting metadata
 
 EXIF, XMP, IPTC, QuickTime atoms, ID3, PDF Info and filesystem timestamps can be absent, stripped, forged, normalized, copied or generated by software. Camera `Make/Model` is not proof of device ownership. Software tags may indicate export stages but not necessarily that AI was used to generate visual content.
 
@@ -334,7 +385,7 @@ EXIF, XMP, IPTC, QuickTime atoms, ID3, PDF Info and filesystem timestamps can be
 - Re-encode signatures, color profile, orientation, bit depth and ICC behavior.
 - Provenance claims separately from conventional metadata.
 
-**Non-findings:** no EXIF, high ISO without visible grain, perfect-looking skin, odd finger anatomy, unsupported “AI generator” tag or clean spectrogram. Each may prompt another test but does not settle the claim.
+Missing EXIF, high ISO without visible grain, smooth skin, unusual finger anatomy, an unsupported "AI generator" tag or a clean spectrogram may prompt another test. Each needs corroboration before it can support a finding about manipulation or generation.
 
 ## 9. Source discovery and media lineage
 
@@ -353,9 +404,11 @@ Search by:
 - Official press libraries, broadcaster archives, creator portfolios and agency media databases.
 - Perceptual duplicates (pHash/dHash) as approximate clustering only; verify each result manually.
 
-Log: search engine; query/crop; date/time; result URL; observed media dimensions/hash; relationship; independence; earliest publication evidence; failure/blocked status. Never claim that lack of a reverse-image match implies novelty or synthetic origin.
+Log the search engine, query/crop, date/time, result URL, observed media dimensions/hash, relationship between versions, source independence, earliest publication evidence and any failed or blocked searches. An unmatched image may simply be absent from the searched indexes; the search alone cannot establish novelty or synthetic origin.
 
-## 10. Reverse search operational recipe
+<a id="10-reverse-search-operational-recipe"></a>
+
+## 10. Reverse-image and keyframe search
 
 For an image:
 1. Search the untouched original representation.
@@ -367,7 +420,7 @@ For an image:
 
 For video:
 1. Inspect edit structure and scene boundaries.
-2. Extract 6–15 diverse frames with timestamps and content hashes.
+2. Extract 6-15 diverse frames with timestamps and content hashes.
 3. Group visually near-duplicate frames, retain high-information ones.
 4. Reverse-search frames and compare them to older reports or footage.
 5. Identify whether narration/subtitles are later additions.
@@ -388,7 +441,7 @@ Determine JPEG baseline/progressive, HEIC/HEIF, AVIF, PNG, TIFF, WebP, GIF/APNG,
 - GIF/APNG frame timing, disposal methods, unexpected frame ordering.
 - Pixel-level comparisons **only after aligning color space, orientation, geometric transforms and crop.**
 
-Use multiple parsers for anomalies. A “damaged” file may result from transfer or parser limitations, not intentional alteration.
+Use multiple parsers for anomalies. A "damaged" file may result from transfer or parser limitations, not intentional alteration.
 
 ## 12. Image localization: choose tests by hypothesis
 
@@ -403,7 +456,9 @@ Use multiple parsers for anomalies. A “damaged” file may result from transfe
 
 **No single image heatmap is proof of manipulation.** Localization is a *model output* requiring controls and review.
 
-## 13. Error level analysis (ELA) — correct interpretation
+<a id="13-error-level-analysis-ela--correct-interpretation"></a>
+
+## 13. Error level analysis (ELA): procedure and limits
 
 ELA highlights differences after recompression under chosen settings. It is highly sensitive to JPEG quality, existing compression, local contrast, repeated saving, color profiles, subsampling, added text and re-encoding.
 
@@ -412,10 +467,10 @@ Operational conditions:
 2. Record recompression quality and subsampling, decoder and all preprocessing.
 3. Compare with **matched negative controls**: authentic screenshots, photos, images with legitimate overlays, images with repeated compression.
 4. Compare suspect and non-suspect regions of similar texture and luminance.
-5. Review independent evidence rather than giving binary “red means edited” answers.
+5. Review independent evidence rather than giving binary "red means edited" answers.
 6. If the original is PNG or severely compressed, treat ELA as unlikely to be diagnostic.
 
-**Prohibited conclusion:** “bright ELA region proves Photoshop/AI.” Better: “recompression residuals differ in region R under settings S; several non-malicious processing paths remain plausible.”
+Describe the measured difference: "Recompression residuals differ in region R under settings S; several non-malicious processing paths remain plausible." A bright ELA region alone cannot establish Photoshop editing or AI generation.
 
 ## 14. Copy-move, seams, illumination and geometry
 
@@ -424,7 +479,7 @@ Operational conditions:
 - Examine perspective, vanishing points, occlusion order, edge quality, shadow geometry and reflections as independent scene constraints.
 - Account for multiple light sources, HDR stacking, flash, glass, mirrors, wide-angle distortion and rolling-shutter effects.
 - Use photogrammetry when calibrated reference geometry is available; report propagated measurement uncertainty.
-- Do not use anatomy/gaze/“uncanny valley” as calibrated proof. Modern synthetic content may show none of the old defects, and genuine footage may look unusual.
+- Do not use anatomy/gaze/"uncanny valley" as calibrated proof. Modern synthetic content may show none of the old defects, and genuine footage may look unusual.
 
 ## 15. Sensor pattern noise, CFA and Noiseprint
 
@@ -452,10 +507,9 @@ Specify the model/checkpoint, model card, dataset, date, operating threshold, su
 
 Measure confusion matrix, sensitivity, specificity, precision at the expected base rate, FPR at chosen threshold, ROC/PR curves, reliability/calibration, subgroup/domain performance, abstention rate and uncertainty. Avoid leakage between train/validation/test from near-duplicate parent media.
 
-**Model disagreement is informative about uncertainty, not a democratic vote.** Three detectors trained on the same dataset or architecture do not constitute three independent lines of evidence.
+Record conflicting detector results and investigate the cause. Check for shared training data or architecture before treating agreement as independent corroboration.
 
-Research frameworks such as TruFor, DeepfakeBench and Noiseprint are **not automatically validated casework instruments**. Validate and document them within your own setting before drawing high-stakes conclusions.
-
+Validate research frameworks such as TruFor, DeepfakeBench and Noiseprint on representative material in your own setting. Document the results before using them to support high-stakes conclusions.
 
 
 ## 17. Video forensic model: three timelines
@@ -492,15 +546,17 @@ ffprobe -v error -select_streams a:0 \
 mediainfo --Full "input.mp4" > mediainfo-full.txt
 ```
 
-`best_effort_timestamp_time` and packet fields can be missing or parser-dependent; record limitations. Output can be very large—use representative subsets for case exhibits, retain full raw output separately.
+`best_effort_timestamp_time` and packet fields can be missing or parser-dependent; record limitations. Output can be very large-use representative subsets for case exhibits, retain full raw output separately.
 
-## 19. Video frame extraction without destroying evidence
+<a id="19-video-frame-extraction-without-destroying-evidence"></a>
+
+## 19. Extracting video frames
 
 Decoding frames creates **derived evidence**. Name frames with their source PTS/timecode where practical; don't mistake extracted PNG creation time for capture time.
 
 ```bash
 mkdir -p derived/keyframes derived/scenes derived/frames
-# Preserve every decoded video frame as lossless PNG — potentially very large:
+# Preserve every decoded video frame as lossless PNG - potentially very large:
 ffmpeg -hide_banner -i "input.mp4" -map 0:v:0 -vsync 0 \
   "derived/frames/frame_%08d.png"
 # Uniform sampling for search/triage only:
@@ -512,7 +568,7 @@ ffmpeg -hide_banner -i "input.mp4" \
   "derived/scenes/scene_%05d.png"
 ```
 
-**Important:** The `-vsync` option may be deprecated or differ across FFmpeg versions; inspect `ffmpeg -h full` and prefer current equivalent behavior when available. Uniform sampling duplicates/drops temporal information and must never be used to infer continuity. If VFR is central to the claim, export precise frame timestamps and retain original stream.
+Check `ffmpeg -h full` for the installed version's handling of `-vsync` and its current equivalents. Uniform sampling duplicates or drops frames, so assess continuity from precise timestamps and the original stream. Retain both when variable frame rate is central to the claim.
 
 ## 20. Video continuity and manipulation hypotheses
 
@@ -541,7 +597,7 @@ Codec anomalies can corroborate editing **only after modeling the recording and 
 - scene changes versus forced I-frames;
 - video/audio track origin discrepancies.
 
-Avoid claims that “two compression levels = forgery.” Legitimate mobile cameras, messaging apps, social platforms and video editors alter these features.
+Avoid claims that "two compression levels = forgery." Legitimate mobile cameras, messaging apps, social platforms and video editors alter these features.
 
 ## 22. High-frame-rate, slow motion, interpolation, HDR and generative fill
 
@@ -564,7 +620,7 @@ ffprobe -v error -select_streams a:0 \
   "input.mp4" > derived/audio/packet-timing.csv
 ```
 
-**Note:** `-c copy` requires compatible output container; select output extension based on actual input codec (e.g. `.aac`, `.m4a`, `.opus`, `.mka`). Do not assume sample-accurate synchronization after conversion. Preserve offset information. Generate synchronized diagnostic playback if lip sync is questioned, and note playback-device latency and time stretching.
+`-c copy` requires a compatible output container; select the output extension for the actual input codec (e.g. `.aac`, `.m4a`, `.opus`, `.mka`). Preserve offset information and verify synchronization after conversion before making sample-level claims. If lip sync is questioned, generate synchronized diagnostic playback and record playback-device latency and time stretching.
 
 ## 24. Live streams, screen recordings and conference media
 
@@ -591,9 +647,11 @@ Distinguish a live event from its recording, stream packaging, subsequent clippi
 7. Test failure modes: motion blur, side profiles, occlusions, dark skin tones, low light, heavy makeup, low bitrate and split-screen.
 8. Have a second analyst review without prior conclusion.
 
-**Do not** equate detector-reported “face authenticity” with whether the speaker actually said the alleged words. Lip-sync analysis requires corresponding audio provenance.
+A detector's assessment of facial manipulation does not establish whether the disputed utterance is genuine. Check the corresponding audio's provenance and its alignment with lip movements.
 
-## 27. Audio authentication is not just voice-clone detection
+<a id="27-audio-authentication-is-not-just-voice-clone-detection"></a>
+
+## 27. Questions to resolve in audio authentication
 
 Separate five questions:
 - Is the **audio file structure** compatible with alleged recording conditions?
@@ -602,7 +660,7 @@ Separate five questions:
 - Is the apparent **speaker identity** supportable from authorized independent evidence?
 - Are the **spoken claims** genuine and properly contextualized?
 
-A genuine recording may contain edited speech. A cloned voice may read a true quotation. A real speaker may speak through synthetic denoising or live enhancement. Do not conflate these.
+A genuine recording may contain edited speech; a cloned voice may read a true quotation. Denoising and live enhancement can also alter a real speaker's voice. Assess file editing, synthesis, speaker identity and the truth of the spoken claims separately.
 
 ## 28. Audio intake, codec and continuity
 
@@ -616,7 +674,7 @@ Record original WAV/BWF, AIFF, FLAC, MP3, AAC, Opus, AMR, OGG or phone/voicemail
 - sample discontinuities and edited word boundaries;
 - timestamps and sample counts where trustworthy.
 
-Never call a frequency cutoff or “clean breath” proof of synthetic audio: narrowband phone codecs, lossy encoders and denoise systems create similar signatures.
+Never call a frequency cutoff or "clean breath" proof of synthetic audio: narrowband phone codecs, lossy encoders and denoise systems create similar signatures.
 
 ## 29. Audio waveform and spectrogram workflow
 
@@ -654,7 +712,7 @@ ASVspoof5 provides research baselines and evaluation protocols; evaluate general
 
 ## 31. Audio speaker diarization, transcription and language
 
-Diarization (“who spoke when,” assigning *anonymous* speaker labels) and transcription help navigate long recordings, but both introduce errors. Use local Whisper/whisper.cpp or other ASR only for indexed leads and revise manually against the original. Record uncertain words and overlapping speech. Machine translation can alter implication, idiom and legal meaning; use qualified translators for contested utterances.
+Diarization ("who spoke when," assigning *anonymous* speaker labels) and transcription help navigate long recordings, but both introduce errors. Use local Whisper/whisper.cpp or other ASR only for indexed leads and revise manually against the original. Record uncertain words and overlapping speech. Machine translation can alter implication, idiom and legal meaning; use qualified translators for contested utterances.
 
 Keep:
 - original timestamps and speech intervals;
@@ -664,7 +722,7 @@ Keep:
 - translation and translator qualifications if material;
 - contradictory alternative hearings.
 
-Synthetic speech may be **partially replaced at a word or phoneme level**. Do not classify only at whole-file granularity.
+Synthetic speech may replace individual words or phonemes. Examine disputed segments as well as the complete file.
 
 ## 32. Audio splice and environment matching
 
@@ -681,7 +739,7 @@ Avoid treating room acoustics as immutable: moving people/phones, doors and diff
 
 ## 33. Voice and video cross-modal checks
 
-Check speech-to-lip alignment in **PTS**, not guessed FPS; voice timbre versus ambient environment; gesture/speech naturalism; visible objects making sound; subtitles versus audio. Account for dubbing, simultaneous interpretation, delays, streaming jitter, video edits, accessibility captions and voice-over. A mismatch supports a synchronization/editing hypothesis, not automatically AI synthesis.
+Use presentation timestamps (PTS) to check speech-to-lip alignment rather than estimating time from nominal FPS. Compare voice timbre with the ambient environment, gestures with speech, visible sound-producing objects with their audio, and subtitles with the spoken words. Account for dubbing, simultaneous interpretation, delays, streaming jitter, video edits, accessibility captions and voice-over. A mismatch supports a synchronization or editing hypothesis; establishing AI synthesis requires further evidence.
 
 ## 34. Forensic treatment of social-media clips
 
@@ -698,12 +756,12 @@ Platforms may use multiple CDN representations; downloads made at different time
 
 ## 35. Video and audio localization result form
 
+Illustrative example. Both rows use invented values.
+
 | Segment | Media time | Claim tested | Observed artifact | Method / controls | Non-malicious explanation | Judgment |
 |---|---|---|---|---|---|---|
-| S001 | 00:24.510–00:27.100 | Possible splice | Ambient bed change | Spectrogram + independent original | Microphone/AGC switch | Unresolved |
-| S002 | 01:12.050–01:13.120 | Visual synthesis | Frame-local anomaly | Detector + matched controls | Scene compression | Needs expert review |
-
-Do not publish such rows as demonstrated factual case findings; this is a **blank illustrative pattern**, with invented example values.
+| S001 | 00:24.510-00:27.100 | Possible splice | Ambient bed change | Spectrogram + independent original | Microphone/AGC switch | Unresolved |
+| S002 | 01:12.050-01:13.120 | Visual synthesis | Frame-local anomaly | Detector + matched controls | Scene compression | Needs expert review |
 
 ## 36. Documents, screenshots, slides and scanned pages
 
@@ -753,13 +811,17 @@ Tesseract, PaddleOCR, OCRmyPDF and document layout parsers produce **derived OCR
 
 General-purpose AI-written text detection can be unreliable, especially for short passages, non-native English, translation, heavy edits, templated professional prose and domain shifts. Avoid numerical "AI percent" verdicts. Prefer verifiable provenance: draft/revision record, authenticated publishing logs, direct writer disclosure or file history. Stylometry may support an authorship comparison only with representative, consented reference texts and rigorous evaluation.
 
-## 40. Content Credentials and C2PA 2.4: correct mental model
+<a id="40-content-credentials-and-c2pa-24-correct-mental-model"></a>
+
+## 40. C2PA 2.4: validation and interpretation
 
 C2PA uses signed, cryptographically bound claims about digital assets and editorial actions. The **trust model is primarily about a signing identity and integrity of signed assertions**; it does not automatically prove the underlying factual truth of a scene.
 
 Spec 2.4 (April 2026) includes new `c2pa.ai-disclosure`, `c2pa.repository-receipt` and sustainability assertions, plus a derived `crJSON` representation. `crJSON` is a **derived export, not a canonical independently verifiable source**. Interpret explicit AI disclosures based on exact assertion semantics and signer's trustworthiness, not as a universal fake/authentic verdict.
 
-### 40.1 Always separate five tests
+<a id="401-always-separate-five-tests"></a>
+
+### 40.1 Validation questions
 
 1. **Presence:** Does this exact asset have embedded/sidecar/discoverable credentials?
 2. **Binding:** Does a manifest cryptographically bind to this exact file or represented rendition?
@@ -809,7 +871,7 @@ Access to proprietary watermark verification (e.g., certain generative-model wat
 
 ## 42. Cross-modal evidence and contradiction matrix
 
-Maintain independent lanes:
+Assess each evidence source separately before combining the findings:
 
 | Lane | Input | Evidence | Main error mode |
 |---|---|---|---|
@@ -843,7 +905,7 @@ Maintain separate columns for:
 - alleged event local time, with uncertainty;
 - recording device clock and offset;
 - EXIF/QuickTime date;
-- uploader’s claimed publish time;
+- uploader's claimed publish time;
 - platform first-seen time;
 - archive crawl/capture time;
 - independent external record time;
@@ -872,9 +934,6 @@ A genuine camera recording can show a scene staged specifically to mislead, and 
 - whether the caption/context makes a false factual claim;
 - whether a recipient would reasonably mistake it for event footage;
 - whether consent/disclosure considerations arise.
-
-This avoids the false dichotomy `real pixels = true story` / `synthetic pixels = false story`.
-
 
 
 ## 47. Media authenticity models: laboratory validation protocol
@@ -910,7 +969,7 @@ Before deploying any automated classifier or localization model, complete a **mo
 | Segment F1 | Correct altered interval detection | Boundary tolerance must be stated |
 | Abstention coverage / risk | How often tool declines judgment | Hiding hard cases improves apparent accuracy |
 
-**Base-rate example (illustrative, not a product claim):** a detector at 95% sensitivity and 5% FPR, when only 1% of a batch is fake, yields PPV ≈ `(.95×.01)/(.95×.01 + .05×.99) = 16.1%`. Therefore an apparently excellent detector can still generate mostly false alarms in low-prevalence screening.
+**Illustrative base-rate calculation:** a detector at 95% sensitivity and 5% FPR, when only 1% of a batch is fake, yields PPV ≈ `(.95×.01)/(.95×.01 + .05×.99) = 16.1%`. These are hypothetical values, not measured product performance. Under these conditions, most positive results would be false alarms.
 
 Never transform benchmark AUC, vendor marketing accuracy or a single detector score into a forensic likelihood ratio. For population or court-use likelihood ratios, specialist statistical calibration and validated populations are needed.
 
@@ -950,9 +1009,11 @@ Before combining two detectors, determine whether they share training data, same
 | Timecode injection | Apparent timestamp without verified clock | Independent clock and recording chain |
 | Coordinated false-source sites | Circular corroboration | Identify common source lineages and independent records |
 
-Describe indicators and defensive tests; do not treat this table as a recipe for fabricating undetectable evidence.
+Use the table to select checks for suspected trace loss or deliberate interference. Assess each mechanism against the acquired file and its processing history.
 
-## 49. Repeatable SOP A — Viral photo with disputed time/place
+<a id="49-repeatable-sop-a--viral-photo-with-disputed-timeplace"></a>
+
+## 49. Repeatable SOP A - Viral photo with disputed time/place
 
 **Goal:** determine whether a viral photo depicts the stated event at the claimed time/place.
 
@@ -971,7 +1032,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 
 **Deliverables:** image hash, source graph, exact URLs, comparison panel with source attribution, geospatial constraints, chronology, confidence and gaps.
 
-## 50. SOP B — Video alleging a public official said something
+<a id="50-sop-b--video-alleging-a-public-official-said-something"></a>
+
+## 50. SOP B - Video alleging a public official said something
 
 1. Define disputed utterance with exact interval and transcript.
 2. Acquire full first-party performance/broadcast if available; preserve clip and full stream separately.
@@ -986,7 +1049,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 11. Redact incidental private individuals in publication derivatives.
 12. Publish careful claim-specific assessment, not a diagnosis of personal identity or motives.
 
-## 51. SOP C — Alleged cloned-voice phone message
+<a id="51-sop-c--alleged-cloned-voice-phone-message"></a>
+
+## 51. SOP C - Alleged cloned-voice phone message
 
 1. Preserve native voicemail/telephony export plus platform/account metadata where lawfully provided.
 2. Note whether capture was direct, handset speaker re-recording, screen recording or forward.
@@ -997,9 +1062,11 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 7. Compare corroborating records (transaction requests, official confirmations, prior authorized messages) without relying on vocal similarity alone.
 8. Never use a disputed voice clip as sole authentication for payment or identity.
 9. Advise independent verification through known channels if there is an ongoing fraud risk.
-10. Report `SYNTHETIC SPEECH NOT ESTABLISHED` rather than “genuine person” when tests are inconclusive.
+10. Report `SYNTHETIC SPEECH NOT ESTABLISHED` rather than "genuine person" when tests are inconclusive.
 
-## 52. SOP D — Suspected edited screenshot or forged document
+<a id="52-sop-d--suspected-edited-screenshot-or-forged-document"></a>
+
+## 52. SOP D - Suspected edited screenshot or forged document
 
 1. Identify source claim: account statement, chat message, court filing, official post or invoice.
 2. Request native document or authenticated export when authorized.
@@ -1012,7 +1079,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 9. Preserve privacy of unrelated account data.
 10. Report exact altered/contradicted portions and unresolved source questions.
 
-## 53. SOP E — Suspicious C2PA / Content Credentials claim
+<a id="53-sop-e--suspicious-c2pa--content-credentials-claim"></a>
+
+## 53. SOP E - Suspicious C2PA / Content Credentials claim
 
 1. Preserve exact asset and hash.
 2. Run compatible validator on native bytes in a restricted environment.
@@ -1025,7 +1094,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 9. Compare provenance with independent first-party archive and claimed event.
 10. Preserve signed original and validation outputs; present limitations explicitly.
 
-## 54. SOP F — Suspected manipulative short-form video
+<a id="54-sop-f--suspected-manipulative-short-form-video"></a>
+
+## 54. SOP F - Suspected manipulative short-form video
 
 1. Identify platform, post ID, source account and whether item is a duet/remix/reaction.
 2. Acquire platform rendition and look for uncut original.
@@ -1038,20 +1109,24 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 9. Report whether deception is due to reuse, editing, captions, synthetic media or some combination.
 10. Preserve specific frames/utterances used as evidence, with PTS.
 
-## 55. SOP G — Fully synthetic or hybrid media in news context
+<a id="55-sop-g--fully-synthetic-or-hybrid-media-in-news-context"></a>
+
+## 55. SOP G - Fully synthetic or hybrid media in news context
 
 1. Establish whether asset is labeled simulation, satirical art, game footage or illustration.
 2. Identify generator/editor claims from file provenance or first-party disclosure.
 3. Retrieve earlier versions, initial posting context and licensing material.
 4. Determine which regions/elements may derive from real footage or stock assets.
-5. Test technical clues with validated controls, not folklore “AI tells.”
+5. Test technical clues with validated controls, not folklore "AI tells."
 6. Verify the stated event independently.
 7. Separate synthetic *presentation* from false *factual implication*.
 8. Mark each conclusion per segment or region with supporting evidence.
 9. Avoid accusing a person or publisher of intent absent independent evidence.
 10. Explain remaining uncertainty.
 
-## 56. SOP H — Multi-camera reconstruction of a public incident
+<a id="56-sop-h--multi-camera-reconstruction-of-a-public-incident"></a>
+
+## 56. SOP H - Multi-camera reconstruction of a public incident
 
 1. Identify cameras/streams by source and authorized provenance.
 2. Capture native copies, clocks, orientation, aspect ratio, lens distortion and frame timing.
@@ -1064,7 +1139,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 9. Require independent specialist review for any consequential physical measurement.
 10. Report only public-interest time/place resolution that respects privacy.
 
-## 57. SOP I — Public online video with suspected removed/spliced audio
+<a id="57-sop-i--public-online-video-with-suspected-removedspliced-audio"></a>
+
+## 57. SOP I - Public online video with suspected removed/spliced audio
 
 1. Acquire full clip, soundtrack and original platform rendition.
 2. Extract audio without transcoding if compatible; create separate PCM analysis derivative.
@@ -1077,7 +1154,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 9. Independently reproduce decisive observations.
 10. Report only what the traces support.
 
-## 58. SOP J — Photo sequence or burst alleged to be “single capture”
+<a id="58-sop-j--photo-sequence-or-burst-alleged-to-be-single-capture"></a>
+
+## 58. SOP J - Photo sequence or burst alleged to be "single capture"
 
 1. Acquire all frame files, bursts/Live Photo companions and metadata sidecars.
 2. Check camera mode, burst numbering, exposure, rolling shutter and computational fusion capabilities.
@@ -1088,7 +1167,9 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 7. Document camera/pipeline assumptions.
 8. Conclude narrowly: single sensor exposure, multi-frame camera composite, or unknown.
 
-## 59. SOP K — Synthetic text plus counterfeit imagery in coordinated narrative
+<a id="59-sop-k--synthetic-text-plus-counterfeit-imagery-in-coordinated-narrative"></a>
+
+## 59. SOP K - Synthetic text plus counterfeit imagery in coordinated narrative
 
 1. Break the composite claim into factual assertions, quotes and media components.
 2. Identify publication network and common first sources.
@@ -1105,16 +1186,16 @@ Describe indicators and defensive tests; do not treat this table as a recipe for
 
 **Peer reviewer tasks:**
 - Validate evidence manifest hashes against original assets.
-- Reproduce the top three technical tests from saved commands/parameters.
+- Reproduce the tests supporting the report's decisive conclusions, using the saved commands and parameters.
 - Verify that no derivative was mistaken for an original.
 - Check negative controls and competing hypotheses.
 - Independently resolve key source citations/URLs.
-- Challenge “AI probability”, C2PA trust, compressed file, metadata and archive timestamp interpretations.
+- Challenge "AI probability", C2PA trust, compressed file, metadata and archive timestamp interpretations.
 - Verify anonymization, minimization and dissemination safety.
 - Confirm all status labels and access limitations.
 - Log disagreements and changed conclusions; preserve initial notes.
 
-**Do not seek artificial consensus.** An unresolved disagreement can be reportable if methods differ or source artifacts cannot be reproduced.
+Record unresolved disagreements, including differences in methods or source artifacts that could not be reproduced.
 
 ## 61. Quality gates for high-impact cases
 
@@ -1139,24 +1220,26 @@ If a gate fails, record it and use constrained language; do not manufacture comp
 
 | Incorrect argument | Correct reasoning |
 |---|---|
-| “No EXIF, therefore AI.” | Metadata routinely stripped by platforms. |
-| “The hands look wrong, therefore fake.” | Visual anomaly may have many explanations; not validated proof. |
-| “ELA is bright in one region, therefore Photoshop.” | Recompression residuals are content/process dependent. |
-| “Detector says 99% fake.” | Score may be uncalibrated or out of domain. |
-| “Five detectors agree.” | Shared training/features may make them dependent. |
-| “There is no C2PA, so it is untrusted.” | C2PA adoption/retention is incomplete. |
-| “C2PA says verified, event must be true.” | Signature/trust is not event-truth verification. |
-| “EXIF date proves capture date.” | Device clocks and tags are editable; corroborate. |
-| “Archive from Tuesday proves publication Tuesday.” | Archive date is observation date. |
-| “First Google result is the source.” | Index rank does not establish earliest origin. |
-| “PRNU absent means synthetic.” | Denoising/recompression/resizing may remove trace. |
-| “Audio sounds robotic, so it is a clone.” | Codecs, enhancement, disability, accent, stress matter. |
-| “The image is camera-original, so depicted incident happened.” | Staging, reenactment and miscaptioning remain possible. |
-| “No anomalies found, therefore unedited.” | Negative result bounded by method power and asset quality. |
-| “Platform URL proves owner of camera.” | Publisher account not equal creator or recording device. |
-| “OCR output proves the words were there.” | OCR needs comparison to original visible pixels. |
+| "No EXIF, therefore AI." | Metadata routinely stripped by platforms. |
+| "The hands look wrong, therefore fake." | Visual anomaly may have many explanations; not validated proof. |
+| "ELA is bright in one region, therefore Photoshop." | Recompression residuals are content/process dependent. |
+| "Detector says 99% fake." | Score may be uncalibrated or out of domain. |
+| "Five detectors agree." | Shared training/features may make them dependent. |
+| "There is no C2PA, so it is untrusted." | C2PA adoption/retention is incomplete. |
+| "C2PA says verified, event must be true." | Signature/trust is not event-truth verification. |
+| "EXIF date proves capture date." | Device clocks and tags are editable; corroborate. |
+| "Archive from Tuesday proves publication Tuesday." | Archive date is observation date. |
+| "First Google result is the source." | Index rank does not establish earliest origin. |
+| "PRNU absent means synthetic." | Denoising/recompression/resizing may remove trace. |
+| "Audio sounds robotic, so it is a clone." | Codecs, enhancement, disability, accent, stress matter. |
+| "The image is camera-original, so depicted incident happened." | Staging, reenactment and miscaptioning remain possible. |
+| "No anomalies found, therefore unedited." | Negative result bounded by method power and asset quality. |
+| "Platform URL proves owner of camera." | Publisher account not equal creator or recording device. |
+| "OCR output proves the words were there." | OCR needs comparison to original visible pixels. |
 
-## 63. Practical interpretation patterns
+<a id="63-practical-interpretation-patterns"></a>
+
+## 63. Interpreting findings
 
 **Supports a claim:** multiple independent first-party records, original file consistency, validated test reproduces on controls and matches external chronology. State what was verified.
 
@@ -1164,7 +1247,7 @@ If a gate fails, record it and use constrained language; do not manufacture comp
 
 **Suggestive technical anomaly:** forensic localization result not reproduced on matched controls, inconsistent file fields with uncertain transfer pipeline. Report as lead.
 
-**Inconclusive:** screenshot-only evidence, no native file, unavailable original, conflicting model scores, unvalidated method, archive gap or uncertain timestamps. Explicitly request the one or two high-value missing artifacts.
+**Inconclusive:** screenshot-only evidence, no native file, unavailable original, conflicting model scores, unvalidated method, archive gap or uncertain timestamps. Request the missing artifacts most likely to resolve the claim.
 
 ## 64. Tool and service selection matrix
 
@@ -1182,9 +1265,11 @@ If a gate fails, record it and use constrained language; do not manufacture comp
 
 **Service privacy note:** Reverse image/audio services may receive sensitive content and metadata. When client data cannot leave a controlled environment, use local tools, public text searches, hashes or consented publication datasets instead.
 
-## 65. Source atlas: core forensic standards, evaluation and provenance
+<a id="65-source-atlas-core-forensic-standards-evaluation-and-provenance"></a>
 
-The addresses below are **public research and tooling starting points**, not proof that each platform has been tested in your environment. Verify current releases, licenses, maintenance, API limits, processing rules and relevance before use. A source's listed capabilities are based on publicly described functions; results must be obtained and tested in the actual case.
+## 65. Standards, evaluation and provenance references
+
+Use these references to select methods and candidate tools. The descriptions summarize publicly documented capabilities. Before casework, check current releases, licenses, maintenance, API limits and processing rules, then test the relevant functions in your environment.
 
 | Resource | Purpose / evidence class | URL |
 |---|---|---|
@@ -1204,28 +1289,32 @@ The addresses below are **public research and tooling starting points**, not pro
 | IIPC WARC specifications | Web collection/evidence archival containers | https://iipc.github.io/warc-specifications/ |
 | Library of Congress Sustainability of Digital Formats | Format properties and preservation risks | https://www.loc.gov/preservation/digital/formats/ |
 
-## 66. Source atlas: local file and metadata inspection
+<a id="66-source-atlas-local-file-and-metadata-inspection"></a>
+
+## 66. File and metadata tools
 
 | Tool | Strength | Caveat / URL |
 |---|---|---|
-| ExifTool | EXIF, XMP, IPTC, video/container metadata | https://exiftool.org/ — tags may be wrong or stripped |
-| MediaInfo | Audio/video technical/container fields | https://github.com/MediaArea/MediaInfo — not an authentication verdict |
-| FFmpeg/ffprobe | Decode, remux, inspect streams, precise PTS logs | https://ffmpeg.org/ — transformations must be logged |
-| ImageMagick | Format/color/derivative image processing | https://imagemagick.org/ — use isolated modern build for untrusted assets |
-| libvips | Efficient imaging/derivatives | https://www.libvips.org/ — processing may alter color/metadata |
-| GIMP | Manual image analysis/annotation | https://www.gimp.org/ — derivatives only |
-| Krita | Image review and layer comparison | https://krita.org/ — preserve original |
-| RawTherapee | RAW image inspection and controlled developing | https://www.rawtherapee.com/ — output is derived |
-| darktable | RAW processing and metadata review | https://www.darktable.org/ — export not original |
-| GraphicsMagick | Alternative raster image inspection | http://www.graphicsmagick.org/ — confirm security updates |
-| LibRaw | Camera RAW decoding | https://www.libraw.org/ — may not cover all proprietary RAW |
-| Tika | Document metadata/text extraction | https://tika.apache.org/ — untrusted file parser |
-| qpdf | PDF structure and integrity checks | https://github.com/qpdf/qpdf — not signature truth |
+| ExifTool | EXIF, XMP, IPTC, video/container metadata | https://exiftool.org/ - tags may be wrong or stripped |
+| MediaInfo | Audio/video technical/container fields | https://github.com/MediaArea/MediaInfo - not an authentication verdict |
+| FFmpeg/ffprobe | Decode, remux, inspect streams, precise PTS logs | https://ffmpeg.org/ - transformations must be logged |
+| ImageMagick | Format/color/derivative image processing | https://imagemagick.org/ - use isolated modern build for untrusted assets |
+| libvips | Efficient imaging/derivatives | https://www.libvips.org/ - processing may alter color/metadata |
+| GIMP | Manual image analysis/annotation | https://www.gimp.org/ - derivatives only |
+| Krita | Image review and layer comparison | https://krita.org/ - preserve original |
+| RawTherapee | RAW image inspection and controlled developing | https://www.rawtherapee.com/ - output is derived |
+| darktable | RAW processing and metadata review | https://www.darktable.org/ - export not original |
+| GraphicsMagick | Alternative raster image inspection | http://www.graphicsmagick.org/ - confirm security updates |
+| LibRaw | Camera RAW decoding | https://www.libraw.org/ - may not cover all proprietary RAW |
+| Tika | Document metadata/text extraction | https://tika.apache.org/ - untrusted file parser |
+| qpdf | PDF structure and integrity checks | https://github.com/qpdf/qpdf - not signature truth |
 | Poppler `pdfinfo` | PDF structural and metadata overview | https://poppler.freedesktop.org/ |
-| 7-Zip | Container enumeration and protected extract | https://www.7-zip.org/ — avoid unsafe archive paths |
-| `file` / libmagic | File type by magic signatures | https://www.darwinsys.com/file/ — no full-parser guarantee |
+| 7-Zip | Container enumeration and protected extract | https://www.7-zip.org/ - avoid unsafe archive paths |
+| `file` / libmagic | File type by magic signatures | https://www.darwinsys.com/file/ - no full-parser guarantee |
 
-## 67. Source atlas: OSINT discovery and publication history
+<a id="67-source-atlas-osint-discovery-and-publication-history"></a>
+
+## 67. Source discovery and publication-history tools
 
 | Source / tool | Investigative role | URL |
 |---|---|---|
@@ -1248,7 +1337,9 @@ The addresses below are **public research and tooling starting points**, not pro
 | Perma.cc | Legal/community archival permalinks | https://perma.cc/ |
 | osintshifu catalog | Discovery of more repositories; verify original projects | https://github.com/osintshifu/awesome-osint-repos |
 
-## 68. Source atlas: pixel forensics, manipulation localization and benchmarks
+<a id="68-source-atlas-pixel-forensics-manipulation-localization-and-benchmarks"></a>
+
+## 68. Image forensics tools and benchmarks
 
 | Source | Use | URL |
 |---|---|---|
@@ -1262,11 +1353,13 @@ The addresses below are **public research and tooling starting points**, not pro
 | Hugging Face Models | Discover model cards and checkpoints | https://huggingface.co/models |
 | OpenCV | Image/video primitives, registration and optical flow | https://github.com/opencv/opencv |
 | scikit-image | Reference image-processing algorithms | https://scikit-image.org/ |
-| ImageHash | Exact-ish perceptual duplicate clustering | https://github.com/JohannesBuchner/imagehash |
+| ImageHash | Perceptual hashing for near-duplicate clustering | https://github.com/JohannesBuchner/imagehash |
 | imagededup | Perceptual image-duplicate candidate retrieval | https://github.com/idealo/imagededup |
 | Label Studio | Ground-truth annotation for calibration/validation | https://github.com/HumanSignal/label-studio |
 
-## 69. Source atlas: audio, speech and video examination
+<a id="69-source-atlas-audio-speech-and-video-examination"></a>
+
+## 69. Audio, speech and video tools
 
 | Tool/source | Use | URL |
 |---|---|---|
@@ -1286,7 +1379,9 @@ The addresses below are **public research and tooling starting points**, not pro
 | VLC | Independent playback/seek/rendering | https://www.videolan.org/vlc/ |
 | mpv | Frame stepping/playback cross-check | https://mpv.io/ |
 
-## 70. Source atlas: documents, OCR, geospatial and event context
+<a id="70-source-atlas-documents-ocr-geospatial-and-event-context"></a>
+
+## 70. Document, OCR, geospatial and event-context tools
 
 | Source | Role | URL |
 |---|---|---|
@@ -1308,28 +1403,27 @@ The addresses below are **public research and tooling starting points**, not pro
 | OpenAerialMap | Community aerial imagery | https://openaerialmap.org/ |
 | PeakVisor | Terrain and mountain skylines (license/coverage limits) | https://peakvisor.com/ |
 
-## 71. Source atlas: commercial/hosted services (access-dependent)
+<a id="71-source-atlas-commercialhosted-services-access-dependent"></a>
 
-These may be useful, but are not automatically evidence-quality. Do not transmit confidential or unconsented content merely to test them. Verify current vendor documentation, account requirements, pricing, upload retention, model/data provenance, access logs, geographical restrictions and ability to export machine-readable findings **for the exact plan offered**.
+## 71. Commercial and hosted services
+
+Before using a hosted service, check the vendor's documentation for the exact plan offered: account requirements, pricing, upload retention, model/data provenance, access logs, geographical restrictions and machine-readable exports. Evaluate accuracy independently for the intended task. Do not upload confidential or unconsented content merely to test a service.
 
 | Service or class | Potential purpose | Caveat |
 |---|---|---|
-| Sensity AI — https://sensity.ai/ | Hosted synthetic-media assessment | Claims/availability and methods require current verification |
-| Reality Defender — https://www.realitydefender.com/ | Hosted multi-modal detection | Need domain-specific validation and privacy review |
-| Hive AI — https://thehive.ai/ | Moderation/synthetic-media classifiers | Scores not forensic probabilities |
-| Truepic — https://www.truepic.com/ | Capture/provenance workflows | Verify which capture/verification functions are accessible |
-| Adobe Content Credentials — https://contentcredentials.org/ | Provenance interfaces | Credentials ≠ factual truth |
-| Google SynthID information — https://deepmind.google/technologies/synthid/ | Proprietary generation watermark context | Public detection capability may be limited or gated |
+| Sensity AI - https://sensity.ai/ | Hosted synthetic-media assessment | Claims/availability and methods require current verification |
+| Reality Defender - https://www.realitydefender.com/ | Hosted multi-modal detection | Need domain-specific validation and privacy review |
+| Hive AI - https://thehive.ai/ | Moderation/synthetic-media classifiers | Scores not forensic probabilities |
+| Truepic - https://www.truepic.com/ | Capture/provenance workflows | Verify which capture/verification functions are accessible |
+| Adobe Content Credentials - https://contentcredentials.org/ | Provenance interfaces | Credentials ≠ factual truth |
+| Google SynthID information - https://deepmind.google/technologies/synthid/ | Proprietary generation watermark context | Public detection capability may be limited or gated |
 | Commercial news/video search systems | Historical editorial content discovery | Verify licensing, original source and index coverage |
 | Platform trust & safety tools | First-party source metadata | Access generally constrained to authorized workflows |
-
-**Do not confuse** marketing pages with examined technology or independent accuracy assessments.
-
 
 
 ## 72. A reproducible local evidence-manifest script
 
-This minimal Python 3 script recursively inventories regular files in a **working evidence directory** and writes paths, sizes and SHA-256 hashes. It does not establish legal custody, process metadata, or safely acquire remote evidence. Run it on a preserved collection, not a live mounted suspect device. Keep output *outside* the scanned directory or explicitly exclude it. Avoid symlink traversal and document filesystem specifics.
+This Python 3 script recursively inventories regular files in a working evidence directory and writes paths, sizes and SHA-256 hashes. Run it on a preserved collection, not a live mounted suspect device. The output must be outside the scanned directory; the script rejects output paths within it and skips symlinks. Document filesystem specifics separately. The manifest records file hashes, without establishing legal custody, preserving filesystem metadata or acquiring remote evidence.
 
 ```python
 #!/usr/bin/env python3
@@ -1397,11 +1491,11 @@ python3 make_manifest.py "CASE-001/01-originals" "CASE-001/original-hashes.csv"
 sha256sum "CASE-001/original-hashes.csv" > "CASE-001/original-hashes.csv.sha256"
 ```
 
-**Caveats:** Symlink entries are skipped, hard links may appear more than once, sparse-file metadata is not preserved, permissions might prevent some reads, and a running process can change file content in ways not captured by a simple mtime/size check. For legally contested evidence use an approved imaging procedure and compare against source/export tool manifests.
+Hard links may appear more than once, sparse-file metadata is not preserved, and permissions might prevent some reads. A running process can also change file content without the simple mtime/size check detecting it. For legally contested evidence, use an approved imaging procedure and compare against source/export tool manifests.
 
 ## 73. A controlled image comparison recipe
 
-**Only for a known pair**, not for proving an unknown “original.” First ensure both images depict the same scene and are registered to a common coordinate system. Even small resizing/color differences yield large pixel differences.
+Use this recipe to compare two documented images of the same scene after geometric and color alignment. It measures differences between the files, without establishing which is the original. Even small resizing or color differences can produce large pixel differences.
 
 ```bash
 set -eu
@@ -1425,7 +1519,7 @@ case "$compare_status" in
 esac
 ```
 
-The `reference-aligned.png`/`questioned-aligned.png` are **not automatically created above**; explicitly create and document registration derivatives before the compare step. Auto-orienting may not account for mirror flips, perspective, cropping, color changes or lens distortion. “Difference pixels” are not “forged pixels.”
+Create and document `reference-aligned.png` and `questioned-aligned.png` before the compare step; the commands above only create the oriented images. Auto-orienting may leave mirror flips, perspective, cropping, color changes or lens distortion uncorrected. Investigate these processing differences before attributing a pixel difference to manipulation.
 
 Use registration landmarks/feature correspondences with robust outlier rejection; visually inspect correspondences. Record transformation matrix, interpolation method and quality residuals.
 
@@ -1473,10 +1567,13 @@ Do not fill unknown capture timestamps from upload times. Mark ambiguous date fo
 
 ## 78. Source register and citation verification
 
-Every cited source should include:
-`[S###] issuer / document title / full URL / source type / original event date / publication date / last revision where known / access UTC date / content examined (full file, page, snippet, screenshot) / source reliability / information credibility / limitations / whether corroboration is independent`.
+For each cited source, record:
 
-Quote minimally; trace consequential claims to primary records. Do not convert a citation on a tool README into evidence that a specific case media item was tested. State `SOURCE REVIEWED`, `TOOL NOT EXECUTED` where applicable.
+- **Identity:** source ID (`S###`), issuer, document title, full URL and source type.
+- **Dates:** original event date, publication date, last revision where known and access date in UTC.
+- **Review:** content examined (full file, page, snippet or screenshot), source reliability, information credibility, limitations and whether corroboration is independent.
+
+Quote minimally and trace consequential claims to primary records. Distinguish reading a tool's documentation from running it on the case material. Use `SOURCE REVIEWED` and `TOOL NOT EXECUTED` when documentation has been reviewed but the tool has not been run. Link completed tests to their execution records.
 
 ## 79. Hypothesis comparison matrix
 
@@ -1489,7 +1586,7 @@ Quote minimally; trace consequential claims to primary records. Do not convert a
 | H5: Staged genuine footage | Genuine acquisition, event claim independently contradicted | [ids] | [ids] | First-person verified event records |
 | H6: Insufficient data | Only low-quality derivative available | [ids] | [ids] | Native evidence |
 
-Do not force a “winner”; document how each item changes the assessment.
+Document how each item changes the assessment. Keep competing hypotheses open when the evidence does not distinguish them.
 
 ## 80. Structured finding syntax
 
@@ -1525,14 +1622,14 @@ Use exact, conservative claim-specific categories:
 - `CONTEXT FALSE / MISATTRIBUTED`: publication history or independent context contradicts the claimed event/time/place.
 - `MANIPULATION SUPPORTED`: multiple validated observations support a specific alteration; no unsupported operator attribution.
 - `SYNTHETIC CONTENT SUPPORTED`: validated evidence supports synthetic region/segment with identified scope and limitations.
-- `NO MATERIAL ALTERATION FOUND BY METHODS USED`: negative result with sensitivity limitations, not global “authentic.”
+- `NO MATERIAL ALTERATION FOUND BY METHODS USED`: negative result with sensitivity limitations, not global "authentic."
 - `INCONCLUSIVE`: insufficient/conflicting evidence.
 - `NOT TESTED`: tool/source access, legal or safety limit.
 
 ## 82. Case report skeleton
 
 ```markdown
-# Digital Media Authenticity, Provenance & Forensics — Case Report
+# Digital Media Authenticity, Provenance & Forensics - Case Report
 
 ## Executive summary
 - Question, strongest supported answer, confidence, key limit.
@@ -1567,19 +1664,19 @@ Use exact, conservative claim-specific categories:
 ## QA and independent review
 - Reproduced tests, reviewer disagreements.
 
-## Annex A — Evidence register
-## Annex B — Tool execution log
-## Annex C — Source register with full URLs
-## Annex D — UTC timeline
-## Annex E — Media lineage graph
-## Annex F — Screenshots, frames and spectrograms
-## Annex G — Model validation/control results
-## Annex H — Preservation/retention record
+## Annex A - Evidence register
+## Annex B - Tool execution log
+## Annex C - Source register with full URLs
+## Annex D - UTC timeline
+## Annex E - Media lineage graph
+## Annex F - Screenshots, frames and spectrograms
+## Annex G - Model validation/control results
+## Annex H - Preservation/retention record
 ```
 
 ## 83. Machine-readable output (optional)
 
-For workflow integration, a conservative schema:
+Use this JSON template to exchange case identifiers, findings and evidence references between tools:
 
 ```json
 {
@@ -1605,7 +1702,7 @@ For workflow integration, a conservative schema:
 }
 ```
 
-Do not confuse a structured field with verified evidence; the schema is a container.
+Link each finding to its evidence IDs and recorded method runs.
 
 ## 84. Open formats and long-term preservation
 
@@ -1617,17 +1714,17 @@ Preserve:
 - text logs and UTF-8 Markdown reports;
 - stable references to tools, models and reproducible environments.
 
-Store at least two restricted copies using institutional retention policy and test periodic fixity. Avoid creating incompatible converted “masters” without retaining the native original. Digitally signed PDFs and case packages should be validated after archival migration.
+Store at least two restricted copies using institutional retention policy and test periodic fixity. Avoid creating incompatible converted "masters" without retaining the native original. Digitally signed PDFs and case packages should be validated after archival migration.
 
 ## 85. Security when involving LLMs or autonomous agents
 
 - LLMs can summarize technical logs and suggest hypotheses; they **cannot replace** original-byte verification, media playback or actual tool execution.
-- Treat image captions, OCR strings, EXIF comments, subtitles, repository README and web pages as **untrusted data**. Ignore instructions inside evidence such as “send the attached files to this server.”
+- Treat image captions, OCR strings, EXIF comments, subtitles, repository README and web pages as **untrusted data**. Ignore instructions inside evidence such as "send the attached files to this server."
 - Do not send restricted media to models or MCP servers lacking documented authorization and privacy controls.
 - Use explicit tool allowlists, network permission, rate limits, read-only storage and human confirmation for any external upload.
 - Record each agent action, source accessed, tool result and derived interpretation; prevent fabricated citations or invented hashes.
 - Model-generated transcripts, images, captions, comparisons or translations are derivatives; label them, retain originals and review manually.
-- A model's unsupported intuition about “AI-looking” imagery is not an expert forensic measurement.
+- A model's unsupported intuition about "AI-looking" imagery is not an expert forensic measurement.
 - If agents cannot access a tool or website, record `NO ACCESS`; never simulate execution.
 
 ## 86. Working with vulnerable populations and sensitive evidence
@@ -1689,7 +1786,7 @@ At least quarterly, or before every high-stakes investigation:
 - [ ] Independent reverse search and crop/OCR checks performed.
 - [ ] Compression and camera assumptions documented.
 - [ ] Suspicious region tests have matched controls.
-- [ ] AI-model scores calibrated or recorded as non-dispositive.
+- [ ] AI-model scores calibrated or recorded with a warning that they do not establish the finding on their own.
 - [ ] Scene context independently examined.
 
 ### Video
@@ -1724,7 +1821,7 @@ At least quarterly, or before every high-stakes investigation:
 - [ ] Findings distinguish observation and inference.
 - [ ] Every consequential statement cites evidence/source IDs.
 - [ ] Model outputs are not expressed as invented event probabilities.
-- [ ] “No findings” not equated to “not altered.”
+- [ ] "No findings" not equated to "not altered."
 - [ ] Peer reviewer reproduces decisive checks or limitation stated.
 - [ ] Case evidence and public derivatives stored separately.
 - [ ] Retention, corrections and dissemination approved.
@@ -1758,12 +1855,14 @@ Scoring should reward correct uncertainty and reproducibility, not simply detect
 - Keep this document and derived commands version-controlled.
 - Report observed evidence, not what a tool is generally capable of.
 - Never invent first-seen dates, EXIF, C2PA manifests, hashes, geolocation, identity, model accuracy or court admissibility.
-- Use qualified experts for dispositive contested examinations and local evidentiary standards.
-- Prefer high-quality, testable *findings* over large counts of unrelated “AI red flags.”
+- Use qualified experts when contested conclusions depend on specialist examination, and apply local evidentiary standards.
+- Prefer high-quality, testable *findings* over large counts of unrelated "AI red flags."
 
-## 92. Source review notes and provenance
+<a id="92-source-review-notes-and-provenance"></a>
 
-The following **primary and original-project** sources informed this guide's methodology. This is not a claim that all software listed in the tool atlas was installed, executed or laboratory-tested. Tool catalogs are discovery points, and technical claims should be rechecked at the original project/documentation release when used in a live case.
+## 92. References
+
+Standards and project documentation for the methods and tools covered in this guide. For validation requirements and update checks, see [model validation](#47-media-authenticity-models-laboratory-validation-protocol) and [maintenance checks](#88-maintenance-and-tool-refresh-procedure).
 
 | ID | Authority/source | Scope | Full official URL |
 |---|---|---|---|
@@ -1790,6 +1889,4 @@ The following **primary and original-project** sources informed this guide's met
 | S021 | ArchiveBox maintainers | Archiving toolkit | https://github.com/ArchiveBox/ArchiveBox |
 | S022 | ExifTool | Original project | https://exiftool.org/ |
 | S023 | osintshifu | FOSS discovery catalogue | https://github.com/osintshifu/awesome-osint-repos |
-| S024 | Original OSINT Tradecraft repository | Earlier AI media manual for migration comparison (historical version) | https://github.com/osintshifu/osint-tradecraft/blob/26de65e97eea94b0febfe92a3fc5414708242481/manuals/ai-media-forensics-manual.md |
-
-**Methodological maintenance notice:** Standards, tools, trust lists, hosting policies and detector performance evolve. Recheck authoritative sources at the time of each case. This guide intentionally avoids asserting that any single algorithm, vendor or model can determine media truth with certainty.
+| S024 | Original OSINT Tradecraft repository | Previous media forensics manual (historical reference) | https://github.com/osintshifu/osint-tradecraft/blob/26de65e97eea94b0febfe92a3fc5414708242481/manuals/ai-media-forensics-manual.md |
