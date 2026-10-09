@@ -24,7 +24,6 @@
   - [15. Tools & Utilities Reference](#15-tools--utilities-reference)
   - [16. Checklists](#16-checklists)
   - [17. Templates & Automation (Snippets)](#17-templates--automation-snippets)
-  - [🔖 Credits](#-credits)
 
 ## Overview
 
@@ -1187,11 +1186,3 @@ When compromise is suspected or confirmed:
 - **Tor-only egress (Linux iptables example):**
 
 - **Test DNS/WebRTC leaks:** visit `https://ipleak.net/` and ensure no IPv6/WebRTC disclosures.
-    
-
-### 🔖 Credits
-
-Maintained by **Oryon** + **[OSINT360](https://tntpp9.short.gy/osint360-gpt)**.  
-This document is part of the **Cyber Intelligence Toolkit** project.  
-
-
