@@ -29,6 +29,7 @@ Pick a field guide or manual for a deeper look, open the checklist to work throu
 | Field Guide | Coverage |
 |:--|:--|
 | **[Digital Media Authenticity, Provenance & Forensics - Advanced Field Guide](./field-guides/digital-media-authenticity-provenance-field-guide.md)** | Examine images, video, audio and documents with provenance checks, technical workflows, validation controls and reporting templates. |
+| **[OSINT Source Discovery & Pivot Engineering - The Investigative Collection Fieldbook](./field-guides/osint-source-discovery-pivot-engineering-fieldbook.md)** | Find original sources, test identifiers and relationships, preserve evidence and review findings with twelve laboratories, retrieval recipes and case templates. |
 
 ## Manuals
 
@@ -56,6 +57,7 @@ A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for
 |:--|:--|
 | Check suspicious media | [AI Detection Checklist](checklists/ai-detection-checklist.md) |
 | Go deeper into media analysis | [Digital Media Authenticity, Provenance & Forensics](./field-guides/digital-media-authenticity-provenance-field-guide.md) |
+| Plan source discovery and evidence collection | [OSINT Source Discovery & Pivot Engineering](./field-guides/osint-source-discovery-pivot-engineering-fieldbook.md) |
 | Set up your OPSEC | [Paranoid OPSEC Manual](manuals/paranoid-opsec-manual.md) |
 | Prepare an investigation with a reusable prompt | [Investigation Prompts](prompts/README.md) |
 
@@ -65,7 +67,8 @@ A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for
 osint-tradecraft/
 ├── README.md
 ├── field-guides/
-│   └── digital-media-authenticity-provenance-field-guide.md
+│   ├── digital-media-authenticity-provenance-field-guide.md
+│   └── osint-source-discovery-pivot-engineering-fieldbook.md
 ├── manuals/
 │   └── paranoid-opsec-manual.md
 ├── checklists/
