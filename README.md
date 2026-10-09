@@ -12,7 +12,7 @@
 [![Stars](https://img.shields.io/github/stars/osintshifu/osint-tradecraft?style=flat-square)](https://github.com/osintshifu/osint-tradecraft/stargazers)
 [![Forks](https://img.shields.io/github/forks/osintshifu/osint-tradecraft?style=flat-square)](https://github.com/osintshifu/osint-tradecraft/forks)
 
-[Manuals](#manuals) · [Checklists](#checklists) · [Agent Skills](#agent-skills) · [Start Here](#start-here) · [Related Projects](#related-projects)
+[Manuals](#manuals) · [Checklists](#checklists) · [Prompts](#prompts) · [Agent Skills](#agent-skills) · [Start Here](#start-here) · [Related Projects](#related-projects)
 
 </div>
 
@@ -20,9 +20,9 @@
 
 ## Overview
 
-**OSINT Tradecraft** is a collection of manuals and checklists for OSINT, media verification, and operational security. Built for investigators, journalists, researchers, and anyone who needs to check what they find and protect how they work.
+**OSINT Tradecraft** is a collection of manuals, checklists, and reusable investigation prompts for OSINT, media verification, cyber intelligence, and operational security. Built for investigators, journalists, researchers, and anyone who needs to check what they find and protect how they work.
 
-Pick a manual for a deeper look or open the checklist when you need to work through a piece of content. Everything is Markdown, ready to read on GitHub or keep locally.
+Pick a manual for a deeper look, open the checklist to work through a piece of content, or choose a prompt for a research task. Everything is Markdown, ready to read on GitHub or keep locally.
 
 ## Manuals
 
@@ -37,6 +37,10 @@ Pick a manual for a deeper look or open the checklist when you need to work thro
 |:--|:--|
 | **[AI Detection Checklist](checklists/ai-detection-checklist.md)** | Work through suspicious images, video, audio, and text with a checklist and links to useful tools. |
 
+## Prompts
+
+Reusable **[investigation prompts](prompts/README.md)** for OSINT, corporate intelligence, cyber threat intelligence, infrastructure research, and digital evidence analysis.
+
 ## Agent Skills
 
 A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for now.
@@ -48,6 +52,7 @@ A place for reusable **[OSINT agent skills](agent-skills/README.md)**. Empty for
 | Check suspicious media | [AI Detection Checklist](checklists/ai-detection-checklist.md) |
 | Go deeper into media analysis | [AI Media Forensics Manual](manuals/ai-media-forensics-manual.md) |
 | Set up your OPSEC | [Paranoid OPSEC Manual](manuals/paranoid-opsec-manual.md) |
+| Prepare an investigation with a reusable prompt | [Investigation Prompts](prompts/README.md) |
 
 ## Repository Structure
 
@@ -59,6 +64,9 @@ osint-tradecraft/
 │   └── paranoid-opsec-manual.md
 ├── checklists/
 │   └── ai-detection-checklist.md
+├── prompts/
+│   ├── README.md
+│   └── *.md
 └── agent-skills/
     └── README.md
 ```
@@ -66,7 +74,7 @@ osint-tradecraft/
 ## Related Projects
 
 - **[Awesome OSINT Repositories](https://github.com/osintshifu/awesome-osint-repos)** - Catalogue of open-source OSINT tools, MCP servers, and agent skills.
-- **[Cyber Intelligence GPT](https://github.com/osintshifu/Cyber-Intelligence-GPT)** - Investigation-oriented Custom GPT and reusable deep research prompts.
+- **[Cyber Intelligence GPT](https://github.com/osintshifu/Cyber-Intelligence-GPT)** - Investigation-oriented Custom GPT.
 
 ---
 
